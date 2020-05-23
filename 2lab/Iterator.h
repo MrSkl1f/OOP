@@ -3,48 +3,51 @@
 
 #include <memory>
 #include <time.h>
-#include "Vector.h"
 
 template<typename Type>
 class Vector;
 
 template <typename Type>
-class myIterator : public std::iterator<std::forward_iterator_tag, Type>
+class MyIterator : public std::iterator<std::forward_iterator_tag, Type>
 {
-private:
-    std::weak_ptr<Type> currentPtr;
 public:
-    myIterator(const myIterator<Type>& curIterator);
-    myIterator(const Vector<Type>& curVector);
-
+    MyIterator(const MyIterator<Type>& curIterator);
+    MyIterator(const Vector<Type>& curVector);
+    // const
     Type& operator*();
-    const Type& operator*() const;
     Type* operator->();
+    const Type& operator*() const;
     const Type* operator->() const;
     operator bool() const;
 
-    myIterator<Type>& operator=(const myIterator<Type>& curIterator);
+    MyIterator<Type>& operator=(const MyIterator<Type>& curIterator);
 
-    myIterator<Type>& operator+=(int n);
-    myIterator<Type> operator+(int n) const;
-    myIterator<Type>& operator++();
-    myIterator<Type> operator++(int);
+    MyIterator<Type>& operator+=(int n);
+    MyIterator<Type> operator+(int n) const;
+    MyIterator<Type>& operator++();
+    MyIterator<Type> operator++(int);
 
-    myIterator<Type>& operator-=(int n);
-    myIterator<Type> operator-(int n) const;
-    myIterator<Type>& operator--();
-    myIterator<Type> operator--(int);
+    MyIterator<Type>& operator-=(int n);
+    MyIterator<Type> operator-(int n) const;
+    MyIterator<Type>& operator--();
+    MyIterator<Type> operator--(int);
 
     int getCurIndex();
     int getSize();
 
-    bool operator==(const myIterator<Type>& curIterator) const;
-    bool operator!=(const myIterator<Type>& curIterator) const;
+    bool operator==(const MyIterator<Type>& curIterator) const;
+    bool operator!=(const MyIterator<Type>& curIterator) const;
+    bool operator<(const MyIterator<Type>& curIterator) const;
+    bool operator<=(const MyIterator<Type>& curIterator) const;
+    bool operator>(const MyIterator<Type>& curIterator) const;
+    bool operator>=(const MyIterator<Type>& curIterator) const;
     
     bool checkLine(int line) const;
 protected:
     int size;
     int curIndex;
+private:
+    std::weak_ptr<Type[]> currentPtr;
 };
 
 #endif // ITERATOR_H

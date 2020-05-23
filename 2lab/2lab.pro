@@ -26,6 +26,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     BaseExceptions.h \
     BaseVector.h \
+    ConstIterator.h \
+    ConstIterator.hpp \
     Exceptions.h \
     Iterator.h \
     Iterator.hpp \

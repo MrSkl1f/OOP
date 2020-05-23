@@ -1,11 +1,11 @@
-#ifndef ITERATOR_HPP
-#define ITERATOR_HPP
+#ifndef CONSTITERATOR_HPP
+#define CONSTITERATOR_HPP
 
-#include "Iterator.h"
+#include "ConstIterator.h"
 #include "Exceptions.h"
 
 template <typename Type>
-MyIterator<Type>::MyIterator(const MyIterator<Type>& curIterator)
+MyConstIterator<Type>::MyConstIterator(const MyConstIterator<Type>& curIterator)
 {
     currentPtr = curIterator.currentPtr;
     size = curIterator.size;
@@ -13,7 +13,7 @@ MyIterator<Type>::MyIterator(const MyIterator<Type>& curIterator)
 }
 
 template <typename Type>
-MyIterator<Type>::MyIterator(const Vector<Type>& curVector)
+MyConstIterator<Type>::MyConstIterator(const Vector<Type>& curVector)
 {
     currentPtr = curVector.data;
     size = curVector.countOfElements;
@@ -21,7 +21,7 @@ MyIterator<Type>::MyIterator(const Vector<Type>& curVector)
 }
 
 template <typename Type>
-Type& MyIterator<Type>::operator*()
+const Type& MyConstIterator<Type>::operator*() const
 {
     checkLine(__LINE__);
     std::shared_ptr<Type[]> copyPtr = currentPtr.lock();
@@ -29,7 +29,7 @@ Type& MyIterator<Type>::operator*()
 }
 
 template <typename Type>
-Type* MyIterator<Type>::operator->()
+const Type* MyConstIterator<Type>::operator->() const
 {
     checkLine(__LINE__);
     std::shared_ptr<Type[]> copyPtr = currentPtr.lock();
@@ -37,23 +37,7 @@ Type* MyIterator<Type>::operator->()
 }
 
 template <typename Type>
-const Type& MyIterator<Type>::operator*() const
-{
-    checkLine(__LINE__);
-    std::shared_ptr<Type[]> copyPtr = currentPtr.lock();
-    return *(copyPtr.get() + curIndex);
-}
-
-template <typename Type>
-const Type* MyIterator<Type>::operator->() const
-{
-    checkLine(__LINE__);
-    std::shared_ptr<Type[]> copyPtr = currentPtr.lock();
-    return (copyPtr.get() + curIndex);
-}
-
-template <typename Type>
-MyIterator<Type>::operator bool() const
+MyConstIterator<Type>::operator bool() const
 {
     checkLine(__LINE__);
     if (curIndex >= size || curIndex < 0 || size == 0)
@@ -62,7 +46,7 @@ MyIterator<Type>::operator bool() const
 }
 
 template<class Type>
-MyIterator<Type>& MyIterator<Type>::operator=(const MyIterator<Type>& curIterator)
+MyConstIterator<Type>& MyConstIterator<Type>::operator=(const MyConstIterator<Type>& curIterator)
 {
     checkLine(__LINE__);
     currentPtr = curIterator.currentPtr;
@@ -70,7 +54,7 @@ MyIterator<Type>& MyIterator<Type>::operator=(const MyIterator<Type>& curIterato
 }
 
 template <typename Type>
-MyIterator<Type>& MyIterator<Type>::operator+=(int n)
+MyConstIterator<Type>& MyConstIterator<Type>::operator+=(int n)
 {
     checkLine(__LINE__);
     currentPtr += n;
@@ -78,16 +62,16 @@ MyIterator<Type>& MyIterator<Type>::operator+=(int n)
 }
 
 template <typename Type>
-MyIterator<Type> MyIterator<Type>::operator+(int n) const
+MyConstIterator<Type> MyConstIterator<Type>::operator+(int n) const
 {
     checkLine(__LINE__);
-    MyIterator<Type> newIter(*this);
+    MyConstIterator<Type> newIter(*this);
     newIter += n;
     return newIter;
 }
 
 template <typename Type>
-MyIterator<Type>& MyIterator<Type>::operator++()
+MyConstIterator<Type>& MyConstIterator<Type>::operator++()
 {
     checkLine(__LINE__);
     ++curIndex;
@@ -95,7 +79,7 @@ MyIterator<Type>& MyIterator<Type>::operator++()
 }
 
 template <typename Type>
-MyIterator<Type> MyIterator<Type>::operator++(int)
+MyConstIterator<Type> MyConstIterator<Type>::operator++(int)
 {
     checkLine(__LINE__);
     ++(*this);
@@ -103,7 +87,7 @@ MyIterator<Type> MyIterator<Type>::operator++(int)
 }
 
 template <typename Type>
-MyIterator<Type>& MyIterator<Type>::operator-=(int n)
+MyConstIterator<Type>& MyConstIterator<Type>::operator-=(int n)
 {
     checkLine(__LINE__);
     currentPtr -= n;
@@ -111,16 +95,16 @@ MyIterator<Type>& MyIterator<Type>::operator-=(int n)
 }
 
 template <typename Type>
-MyIterator<Type> MyIterator<Type>::operator-(int n) const
+MyConstIterator<Type> MyConstIterator<Type>::operator-(int n) const
 {
     checkLine(__LINE__);
-    MyIterator<Type> newIter(*this);
+    MyConstIterator<Type> newIter(*this);
     newIter -= n;
     return newIter;
 }
 
 template <typename Type>
-MyIterator<Type>& MyIterator<Type>::operator--()
+MyConstIterator<Type>& MyConstIterator<Type>::operator--()
 {
     checkLine(__LINE__);
     --curIndex;
@@ -128,7 +112,7 @@ MyIterator<Type>& MyIterator<Type>::operator--()
 }
 
 template <typename Type>
-MyIterator<Type> MyIterator<Type>::operator--(int)
+MyConstIterator<Type> MyConstIterator<Type>::operator--(int)
 {
     checkLine(__LINE__);
     --(*this);
@@ -136,61 +120,61 @@ MyIterator<Type> MyIterator<Type>::operator--(int)
 }
 
 template <typename Type>
-int MyIterator<Type>::getCurIndex()
+int MyConstIterator<Type>::getCurIndex()
 {
     return curIndex;
 }
 
 template <typename Type>
-int MyIterator<Type>::getSize()
+int MyConstIterator<Type>::getSize()
 {
     return size;
 }
 
 template <typename Type>
-bool MyIterator<Type>::operator==(const MyIterator<Type>& curIterator) const
+bool MyConstIterator<Type>::operator==(const MyConstIterator<Type>& curIterator) const
 {
     checkLine(__LINE__);
     return currentPtr.lock() == curIterator.currentPtr.lock();
 }
 
 template <typename Type>
-bool MyIterator<Type>::operator!=(const MyIterator<Type>& curIterator) const
+bool MyConstIterator<Type>::operator!=(const MyConstIterator<Type>& curIterator) const
 {
     checkLine(__LINE__);
     return currentPtr.lock() != curIterator.currentPtr.lock();
 }
 
 template <typename Type>
-bool MyIterator<Type>::operator<(const MyIterator<Type>& curIterator) const
+bool MyConstIterator<Type>::operator<(const MyConstIterator<Type>& curIterator) const
 {
     checkLine(__LINE__);
     return currentPtr.lock() < curIterator.currentPtr.lock();
 }
 
 template <typename Type>
-bool MyIterator<Type>::operator<=(const MyIterator<Type>& curIterator) const
+bool MyConstIterator<Type>::operator<=(const MyConstIterator<Type>& curIterator) const
 {
     checkLine(__LINE__);
     return currentPtr.lock() <= curIterator.currentPtr.lock();
 }
 
 template <typename Type>
-bool MyIterator<Type>::operator>(const MyIterator<Type>& curIterator) const
+bool MyConstIterator<Type>::operator>(const MyConstIterator<Type>& curIterator) const
 {
     checkLine(__LINE__);
     return currentPtr.lock() > curIterator.currentPtr.lock();
 }
 
 template <typename Type>
-bool MyIterator<Type>::operator>=(const MyIterator<Type>& curIterator) const
+bool MyConstIterator<Type>::operator>=(const MyConstIterator<Type>& curIterator) const
 {
     checkLine(__LINE__);
     return currentPtr.lock() >= curIterator.currentPtr.lock();
 }
 
 template <typename Type>
-bool MyIterator<Type>::checkLine(int line) const
+bool MyConstIterator<Type>::checkLine(int line) const
 {
     if (!currentPtr.expired())
         return true;
@@ -200,4 +184,4 @@ bool MyIterator<Type>::checkLine(int line) const
     return false;
 }
 
-#endif // ITERATOR_HPP
+#endif // CONSTITERATOR_HPP

@@ -1,13 +1,14 @@
-#ifndef BASEEXCEPTIONS_H
-#define BASEEXCEPTIONS_H
+#ifndef VectorExceptions_H
+#define VectorExceptions_H
 
 #include <iostream>
 #include <exception>
 
-class BaseExceptions : public std::exception
+// название
+class VectorExceptions : public std::exception
 {
 public:
-    explicit BaseExceptions(const std::string& fileName,
+    explicit VectorExceptions(const std::string& fileName,
                                               const std::string& className,
                                               const int curLine,
                                               const char* curTime,
@@ -20,10 +21,10 @@ protected:
     std::string errInfo;
 };
 
-BaseExceptions::BaseExceptions(const std::string& fileName, const std::string& className,
+VectorExceptions::VectorExceptions(const std::string& fileName, const std::string& className,
                                               const int curLine, const char* curTime, const std::string& curInfo)
 {
     errInfo = "\nException in: \nFile: " + fileName + "\nClass: " + className + "\nLine: " +
     std::to_string(curLine) + "\nAt time: " + curTime + "Exception: " + curInfo;
 }
-#endif // BASEEXCEPTIONS_H
+#endif // VectorExceptions_H
