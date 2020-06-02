@@ -565,7 +565,7 @@ bool Vector<Type>::checkSizes(int sizeFirst, int sizeSecond, int line) const
 template <typename Type>
 bool Vector<Type>::checkSize(int curSize, int line) const
 {
-    if (curSize != 0)
+    if (curSize > 0)
         return true;
     time_t curTime = time(NULL);
     throw emptyVectorException(__FILE__, typeid(*this).name(), line, ctime(&curTime));

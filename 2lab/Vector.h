@@ -32,7 +32,7 @@ public:
     const Type& operator [](int curIndex) const;
     const Type& getNeedElement(int curIndex) const;
 
-    void changeElement(int curIndex, const Type& number);
+    void changeElement(int curIndex, const Type& number); //setElem
 
     MyIterator<Type> begin() { return MyIterator<Type> (*this); };
     MyIterator<Type> end() { return MyIterator<Type> (*this ) + this->countOfElements; };
@@ -65,6 +65,7 @@ public:
     Vector<Type>& operator /=(const Vector<Type>& curVector);
     Vector<Type>& operator /=(const Type& curNum);
     Vector<Type> divOnVector(const Vector<Type>& curVector) const;
+    // метод деления на число
 
     //  Обычное сложение
     Vector<Type> operator +(const Vector<Type>& curVector) const;
@@ -85,7 +86,7 @@ public:
     // Векторное произведение
     Type sumOfVectMult(const Vector<Type>& curVector) const;
     Vector<Type> operator %(const Vector<Type>& curVector) const;
-    Vector<Type> &operator %=(const Vector<Type>& curVector);
+    Vector<Type>& operator %=(const Vector<Type>& curVector);
     Vector<Type> vectMult(const Vector<Type>& curVector) const;
 
     bool operator ==(const Vector<Type>& curVector) const;
