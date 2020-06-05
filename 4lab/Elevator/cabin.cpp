@@ -12,10 +12,11 @@ ElevatorCabin::ElevatorCabin(QObject *parent) : QObject(parent)
     QObject::connect(this, SIGNAL(cabinStopped(int)), &doors, SLOT(startOpeningDoors()));
     QObject::connect(this, SIGNAL(preparingForMoving()), &doors, SLOT(startClosingDoors()));
 
-    QObject::connect(&doors, SIGNAL(doorsClosed()), this, SLOT(movingOfCabin()));
+    QObject::connect(&doors, SIGNAL(doorsClosed()), this, SLOT(checkMoving()));
 
     QObject::connect(this, SIGNAL(freeCabin()), this, SLOT(waitingForCall()));
     QObject::connect(this, SIGNAL(reachedNewFloor()), this, SLOT(waitingForEntrance()));
+    QObject::connect(this, SIGNAL(continueMoving()), this, SLOT(movingOfCabin()));
 }
 
 void ElevatorCabin::setStateLabels(QLabel *doorsLabel, QLabel *cabinLabel)
@@ -53,27 +54,30 @@ void ElevatorCabin::setText(QTextEdit *newText)
 
 void ElevatorCabin::checkMoving()
 {
-    if (currentFloor == newFloor)
-        emit reachedNewFloor();
+    if (currentState == MOVING || currentState == GOT_NEW_FLOOR)
+    {
+        currentState = CHECK_MOVING;
+        if (currentFloor == newFloor)
+            emit reachedNewFloor();
+        else
+        {
+            emit crossingTheFloor(currentFloor);
+            emit continueMoving();
+        }
+    }
     else
     {
-        currentState = CONTINUE_MOVING;
-        currentFloor += currentDirection;
-        emit crossingTheFloor(currentFloor);
-        timerForCrossingFloor.start(CROSSING_FLOOR);
+        currentState = CHECK_MOVING;
+        emit freeCabin();
     }
 }
 
 void ElevatorCabin::movingOfCabin()
 {
-    if (currentState == GOT_NEW_FLOOR)
-    {
-        currentState = MOVING;
-        setCabinState();
-        timerForCrossingFloor.start(CROSSING_FLOOR);
-    }
-    else
-        emit freeCabin();
+    currentState = MOVING;
+    setCabinState();
+    timerForCrossingFloor.start(CROSSING_FLOOR);
+    currentFloor += currentDirection;
 }
 
 void ElevatorCabin::waitingForCall()

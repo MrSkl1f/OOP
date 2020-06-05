@@ -12,7 +12,7 @@ class ElevatorCabin : public QObject
     enum stateOfCabin
     {
         MOVING,
-        CONTINUE_MOVING,
+        CHECK_MOVING,
         GOT_NEW_FLOOR,
         WAITING_FOR_CALL,
         WAITING_FOR_ENTRANCE
@@ -29,6 +29,7 @@ signals:
     void reachedNewFloor();
     void cabinStopped(int floor);
     void freeCabin();
+    void continueMoving();
 
 public slots:
     void movingOfCabin();
