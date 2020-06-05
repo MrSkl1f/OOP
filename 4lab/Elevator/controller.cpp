@@ -1,6 +1,5 @@
 #include "controller.h"
 
-// начальное состояние контрольной панели
 ElevatorController::ElevatorController(QObject *parent) : QObject(parent)
 {
     currentState = FREE;
@@ -8,7 +7,9 @@ ElevatorController::ElevatorController(QObject *parent) : QObject(parent)
     currentFloor = 0;
 
     for (int i = 0; i < COUNT_OF_FLOORS; i++)
-        calls[i] = false;
+        floorCalls[i] = false;
+
+    QObject::connect(this, SIGNAL(setNewTask(int)), this, SLOT(gotNewTask(int)));
 }
 
 void ElevatorController::setFloorLabel(QLabel *currentLabel)
@@ -26,30 +27,32 @@ void ElevatorController::setText(QTextEdit *newText)
     currentText = newText;
 }
 
-void ElevatorController::set_new_target(int floor)
+void ElevatorController::setNewFloor(int floor)
 {
-    currentState = BUSY;
-    calls[floor - 1] = true;
-    nextFloor(floor);
-    emit setNewFloor(floor);
+    emit setNewTask(floor);
+}
+
+void ElevatorController::gotNewTask(int floor)
+{
+    floorCalls[floor - 1] = true;
+    if (currentState == FREE)
+    {
+        currentState = BUSY;
+        nextFloor(floor);
+        emit sendNewFloor(floor);
+    }
 }
 
 void ElevatorController::achievedFloor(int floor)
 {
-    if (currentState == BUSY)
-    {
-        currentFloor = floor;
-        currentDirection = STAY;
-        calls[floor - 1] = false;
-
-        if (nextFloor(floor))
-            emit setNewFloor(floor);
-        else
-        {
-            setFloor(floor);
-            currentState = FREE;
-        }
-    }
+    currentState = FREE;
+    currentFloor = floor;
+    currentDirection = STAY;
+    floorCalls[floor - 1] = false;
+    if (nextFloor(floor))
+        setNewFloor(floor);
+    else
+        setFloor(floor);
 }
 
 void ElevatorController::passedFloor(int floor)
@@ -58,25 +61,24 @@ void ElevatorController::passedFloor(int floor)
     currentText->append("Лифт преодолел " + QString::number(floor));
 }
 
+
 bool ElevatorController::nextFloor(int &floor)
 {
-    int step = -1;
-    if (currentDirection == UP)
+    int directionStep = 1;
+    if (currentDirection == DOWN)
+        directionStep = -1;
+    for (int i = currentFloor; i <= COUNT_OF_FLOORS && i > 0; i += directionStep)
     {
-        step = 1;
-    }
-    for (int i = currentFloor; i <= COUNT_OF_FLOORS && i > 0; i += step)
-    {
-        if (calls[i - 1])
+        if (floorCalls[i - 1])
         {
             floor = i;
             return true;
         }
     }
-    step = -step;
-    for (int i = currentFloor; i <= COUNT_OF_FLOORS && i > 0; i+= step)
+    directionStep = -directionStep;
+    for (int i = currentFloor; i <= COUNT_OF_FLOORS && i > 0; i+= directionStep)
     {
-        if (calls[i - 1])
+        if (floorCalls[i - 1])
         {
             floor = i;
             return true;

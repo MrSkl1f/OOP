@@ -12,7 +12,7 @@ class ElevatorCabin : public QObject
     enum stateOfCabin
     {
         MOVING,
-        CONTINUE_MOVING,
+        CHECK_MOVING,
         GOT_NEW_FLOOR,
         WAITING_FOR_CALL,
         WAITING_FOR_ENTRANCE

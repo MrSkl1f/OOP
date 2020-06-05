@@ -15,6 +15,7 @@ public:
     void addNewCall(int floor);
     void setLabels(QLabel* doorsLabel, QLabel *cabinLabel, QLabel *floorLabel);
     void setTextEdit(QTextEdit* newText);
+    
 private:
     ElevatorController elevatorController;
     ElevatorCabin elevatorCabin;

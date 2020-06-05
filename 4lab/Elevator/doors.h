@@ -36,9 +36,11 @@ private slots:
 
 private:
     stateOfDoors currentState;
+
     QTimer timerForOpeningDoors;
     QTimer timerForClosingDoors;
     QTimer timerForStayingOpen;
+
     QLabel* doorsState;
     void setDoorsState();
 };

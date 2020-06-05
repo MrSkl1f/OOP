@@ -49,15 +49,15 @@ void ElevatorDoors::startOpeningDoors()
     {
         currentState = OPENNING;
         setDoorsState();
-        timerForOpeningDoors.start(OPENING_N_CLOSING);
+        timerForOpeningDoors.start(OPENING_DOOR);
     }
-    if (currentState == CLOSING)
+    else if (currentState == CLOSING)
     {
         currentState = OPENNING;
         setDoorsState();
         int remainingTime = timerForClosingDoors.remainingTime();
         timerForClosingDoors.stop();
-        timerForOpeningDoors.start(OPENING_N_CLOSING - remainingTime);
+        timerForOpeningDoors.start(OPENING_DOOR - remainingTime);
     }
 }
 
@@ -67,7 +67,7 @@ void ElevatorDoors::startClosingDoors()
     {
         currentState = CLOSING;
         setDoorsState();
-        timerForClosingDoors.start(OPENING_N_CLOSING);
+        timerForClosingDoors.start(CLOSING_DOOR);
     }
     else if (currentState == CLOSED)
         emit doorsClosed();

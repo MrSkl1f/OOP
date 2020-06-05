@@ -53,11 +53,11 @@ void ElevatorCabin::setText(QTextEdit *newText)
 
 void ElevatorCabin::checkMoving()
 {
+    currentState = CHECK_MOVING;
     if (currentFloor == newFloor)
         emit reachedNewFloor();
     else
     {
-        currentState = CONTINUE_MOVING;
         currentFloor += currentDirection;
         emit crossingTheFloor(currentFloor);
         timerForCrossingFloor.start(CROSSING_FLOOR);
@@ -66,14 +66,10 @@ void ElevatorCabin::checkMoving()
 
 void ElevatorCabin::movingOfCabin()
 {
-    if (currentState == GOT_NEW_FLOOR)
-    {
-        currentState = MOVING;
-        setCabinState();
-        timerForCrossingFloor.start(CROSSING_FLOOR);
-    }
-    else
-        emit freeCabin();
+    currentState = MOVING;
+    setCabinState();
+    timerForCrossingFloor.start(CROSSING_FLOOR);
+    emit freeCabin();
 }
 
 void ElevatorCabin::waitingForCall()

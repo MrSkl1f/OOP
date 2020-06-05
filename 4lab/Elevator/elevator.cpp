@@ -2,14 +2,14 @@
 
 Elevator::Elevator()
 {
-    QObject::connect(&elevatorController, SIGNAL(setNewFloor(int)), &elevatorCabin, SLOT(cabinSetNewFloor(int)));
-    QObject::connect(&elevatorCabin, SIGNAL(crossingTheFloor(int, direction)), &elevatorController, SLOT(passedFloor(int)));
-    QObject::connect(&elevatorCabin, SIGNAL(cabin_stopped(int)), &elevatorController, SLOT(achievedFloor(int)));
+    QObject::connect(&elevatorController, SIGNAL(sendNewFloor(int)), &elevatorCabin, SLOT(gotNewFloor(int)));
+    QObject::connect(&elevatorCabin, SIGNAL(crossingTheFloor(int)), &elevatorController, SLOT(passedFloor(int)));
+    QObject::connect(&elevatorCabin, SIGNAL(cabinStopped(int)), &elevatorController, SLOT(achievedFloor(int)));
 }
 
 void Elevator::addNewCall(int floor)
 {
-    elevatorController.set_new_target(floor);
+    elevatorController.setNewFloor(floor);
 }
 
 void Elevator::setTextEdit(QTextEdit *newText)
